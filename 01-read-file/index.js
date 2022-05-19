@@ -1,7 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+const {stdout} = process;
 
-fs.readFile(path.join(__dirname, 'text.txt'), (err, data) => {
-  if (err) throw err;
-  console.log(data.toString());
-});
+const stream = fs.createReadStream(path.join(__dirname, 'text.txt'));
+const errorHandler = () => {
+  console.log('Error');
+  stream.destroy();
+};
+
+stream
+  .on('error', errorHandler)
+  .on('data', data => {stdout.write(data.toString());});
