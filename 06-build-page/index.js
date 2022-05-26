@@ -6,7 +6,7 @@ const {
   copyFile,
   unlink,
   appendFile,
-  rmdir
+  rmdir,
 } = require('fs/promises');
 const path = require('path');
 
@@ -48,9 +48,11 @@ async function copyDir(src, dest, files) {
   let srcHTML = await readFile(path.join(__dirname, 'template.html'), 'utf-8');
   const components = await readDir(compPath);
   for (const comp of components) {
-    const compSrc = await readFile(path.join(compPath, comp.name), 'utf-8');
-    const compName = comp.name.split('.')[0];
-    srcHTML = srcHTML.replace(`{{${compName}}}`, compSrc);
+    if (comp.name.split('.')[1] === 'html') {
+      const compSrc = await readFile(path.join(compPath, comp.name), 'utf-8');
+      const compName = comp.name.split('.')[0];
+      srcHTML = srcHTML.replace(`{{${compName}}}`, compSrc);
+    }
   }
   await writeFile(path.join(destPath, 'index.html'), srcHTML);
 
