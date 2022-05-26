@@ -60,7 +60,7 @@ async function copyDir(src, dest, files) {
   for (const style of styles) {
     const styleSrc = await readFile(path.join(stylesPath, style.name), 'utf-8');
     const styleDest = path.join(destPath, 'style.css');
-    await appendFile(styleDest, styleSrc);
+    await appendFile(styleDest, `\n\n${styleSrc}`);
   }
 
   const assetsDest = path.join(destPath, 'assets');
